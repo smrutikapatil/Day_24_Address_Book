@@ -19,14 +19,13 @@ public class AddressBookMainClass  {
 		System.out.println("Welcome to Address Book Program\n");
 
 		addressbooks.addContacts();
-
 	}
 
 	public void addContacts() {
 
 		System.out.println("Enter your choice");
 		System.out.println(
-				"1 : Add new contact    2 : Edit contact  3 : Delete contact  4: Add Multiple Contacts 5: Display Contacts");
+				"1 : Add new contact    2 : Edit contact  3 : Delete contact  4: Add Multiple Contacts 5: Display Contacts 6: Search Person");
 		int choice = sc.nextInt();
 		switch (choice) {
 		case 1:
@@ -118,10 +117,19 @@ public class AddressBookMainClass  {
 			addressbooks.displayContacts(addressBookSystem);
 			addressbooks.addContacts();
 			break;
+
+		case 6:
+			System.out.println("Search the person in perticular city or state ");
+			System.out.println("Please Enter the City Name ");
+			String cityname = sc.next();
+			System.out.println("Please Enter the State Name ");
+			String statename = sc.next();
+			addressbooks.searchPerson(cityname, statename);
+			addressbooks.addContacts();
+			break;
 		default:
 			System.out.println("Please Enter correct choice");
 		}
-
 	}
 
 	public void editContact(String findAddressBook, String name, String editFirstName, String editLastName,
@@ -177,7 +185,6 @@ public class AddressBookMainClass  {
 				}
 			}
 		}
-
 	}
 
 	public void deleteContactDetails(String name, String yourBookname) {
@@ -278,6 +285,24 @@ public class AddressBookMainClass  {
 			contactsLis.add(contact);
 			Addressvalues.setContacts(contactsLis);
 			addressBookSystem.put(addressBookName, Addressvalues);
+		}
+	}
+
+	public void searchPerson(String cityname, String statename) {
+		List<Contact> contactsList = new ArrayList<>();
+		for (Map.Entry<String, AddressBook> set : addressBookSystem.entrySet()) {
+			AddressBook addressBook = set.getValue();
+			contactsList = addressBook.getContacts();
+			boolean isPresent = contactsList.stream()
+					.anyMatch(con -> con.getCity().equals(cityname) || con.getState().equals(statename));
+			if (isPresent) {
+				contactsList.stream().filter(s -> s.getCity().equals(cityname) || s.getState().equals(statename))
+						.sorted().forEachOrdered(conts -> System.out.println("User name :" + conts.getFirstName()));
+				
+			} else {
+
+				System.out.println("This peson not present in this city or state");
+			}
 		}
 	}
 }
