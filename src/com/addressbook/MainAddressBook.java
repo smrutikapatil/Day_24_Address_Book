@@ -6,31 +6,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class MainAddressBook {
-
 	private static Scanner sc = new Scanner(System.in);
 	private static AddressBook addressbookValue = new AddressBook();
-
 	private static MainAddressBook addressbooks = new MainAddressBook();
 	private Map<String, AddressBook> addressBookSystem = new HashMap<>();
 
 	public static void main(String[] args) {
 		System.out.println("Welcome to Address Book Program\n");
-
 		addressbooks.addContacts();
-
 	}
 
 	public void addContacts() {
-
 		System.out.println("Enter your choice");
 		System.out.println(
 				"1 : Add new contact\n2 : Edit contact\n3 : Delete contact\n4 : Add Multiple Contacts\n5 : Display Contacts\n6 : Search Person\n7 : Person with City and State");
 		int choice = sc.nextInt();
 		switch (choice) {
 		case 1:
-
 			List<Contact> contacts = new ArrayList<>();
 			System.out.println("Enter Your Address Book name ");
 			String addresBookname = sc.next();
@@ -64,7 +59,6 @@ public class MainAddressBook {
 			addressbookValue.setContacts(contacts);
 			addressBookSystem.put(addresBookname, addressbookValue);
 			addressbooks.addContacts();
-
 			break;
 		case 2:
 			System.out.println("Enter Your Address Book name ");
@@ -99,18 +93,15 @@ public class MainAddressBook {
 			addressbooks.editContact(findAddressBook, nameToEdit, editFirstName, editLastName, editAddress, editCity,
 					editState, editZip, editPhoneNumber, editEmail);
 			addressbooks.addContacts();
-
 		case 3:
 			System.out.println("Enter Your Address Book name ");
 			String yourBookname = sc.next();
 			System.out.println("Enter the person Name");
 			String deletename = sc.next();
-
 			addressbooks.deleteContactDetails(deletename, yourBookname);
 			addressbooks.addContacts();
 			break;
 		case 4:
-
 			addressbooks.addMultipleContacts();
 			addressbooks.addContacts();
 			break;
@@ -118,7 +109,6 @@ public class MainAddressBook {
 			addressbooks.displayContacts(addressBookSystem);
 			addressbooks.addContacts();
 			break;
-
 		case 6:
 			System.out.println("Search the person in perticular city or state ");
 			System.out.println("Please Enter the City Name ");
@@ -129,28 +119,28 @@ public class MainAddressBook {
 			addressbooks.addContacts();
 			break;
 		case 7:
-			viewCityOrStateByPesron();
+			viewCityAndPersonAsWellAsStateAndPesron();
+			addressbooks.addContacts();
+			break;
+		case 8:
+			addressbooks.numberOfContactsCountByCityAndState();
 			addressbooks.addContacts();
 			break;
 		default:
 			System.out.println("Please Enter correct choice");
 		}
-
 	}
 
 	public void editContact(String findAddressBook, String name, String editFirstName, String editLastName,
 			String editAddress, String editCity, String editState, int editZip, long editPhoneNumber,
 			String editEmail) {
-
 		AddressBook addressbook = new AddressBook();
-
 		AddressBook addressbookdetails = addressBookSystem.get(findAddressBook);
 		List<Contact> contactDetails = addressbookdetails.getContacts();
 		for (int i = 0; i <= contactDetails.size() - 1; i++) {
 
 			Contact contactperson = contactDetails.get(i);
 			if (contactperson.getFirstName().equals(name)) {
-
 				contactperson.setFirstName(editFirstName);
 				contactperson.setLastName(editLastName);
 				contactperson.setAddress(editAddress);
@@ -168,16 +158,12 @@ public class MainAddressBook {
 	}
 
 	public void displayContacts(Map<String, AddressBook> addressBookSystem) {
-
 		for (Entry<String, AddressBook> set : addressBookSystem.entrySet()) {
-
 			AddressBook values = set.getValue();
 			List<Contact> contactDetails = values.getContacts();
-
 			for (int i = 0; i <= contactDetails.size() - 1; i++) {
 				Contact contactperson = contactDetails.get(i);
 				if (!contactperson.getFirstName().equals("")) {
-
 					System.out.println("Conatct Details :");
 					System.out.println("Book  Name --- " + set.getKey());
 					System.out.println("FirstName :" + contactperson.getFirstName() + "      LastName :"
@@ -186,18 +172,14 @@ public class MainAddressBook {
 							+ "     Zip :" + contactperson.getZip() + "     Phone Number :"
 							+ contactperson.getPhoneNumber());
 				} else {
-
 					System.out.println("No Conatct Details available :");
 				}
 			}
 		}
-
 	}
 
 	public void deleteContactDetails(String name, String yourBookname) {
-
 		AddressBook addressbook = new AddressBook();
-
 		AddressBook values = addressBookSystem.get(yourBookname);
 		List<Contact> contactDetails = values.getContacts();
 
@@ -209,12 +191,10 @@ public class MainAddressBook {
 				addressBookSystem.put(yourBookname, addressbook);
 			}
 		}
-
 		System.out.println("Contact deleted Successfully");
 	}
 
 	public void addMultipleContacts() {
-
 		List<Contact> contacts = new ArrayList<>();
 		System.out.println("Enter Your Address Book name ");
 		String findAddressBook = sc.next();
@@ -236,22 +216,20 @@ public class MainAddressBook {
 
 		System.out.println("Enter the Zip Name");
 		int zip = sc.nextInt();
-
+		
 		System.out.println("Enter the PhoneNumber");
 		long phoneNumber = sc.nextLong();
-
+		
 		System.out.println("Enter the email");
 		String email = sc.next();
+		
 		Contact contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
 		contacts.add(contact);
-
 		addtoOurAdrressBook(contact, findAddressBook);
-
 		System.out.println("Do you want add one more Contact Details");
 		System.out.println("1 :Yes     2 :No");
 		int choice = sc.nextInt();
 		switch (choice) {
-
 		case 1:
 			addressbooks.addMultipleContacts();
 			break;
@@ -261,12 +239,9 @@ public class MainAddressBook {
 			break;
 		default:
 			System.out.println("Please Enter correct choice");
-
 		}
-
 		addressbooks.displayContacts(addressBookSystem);
 		addressbooks.addContacts();
-
 	}
 
 	public void addtoOurAdrressBook(Contact contact, String addressBookName) {
@@ -279,9 +254,7 @@ public class MainAddressBook {
 			boolean isPresent = contactDetails.stream()
 					.anyMatch(con -> con.getFirstName().equals(contact.getFirstName()));
 			if (isPresent) {
-
 				System.out.println("This peson name already persent");
-
 			} else {
 				contactDetails.add(contact);
 				values.setContacts(contactDetails);
@@ -310,11 +283,10 @@ public class MainAddressBook {
 
 				System.out.println("This peson not present in this city or state");
 			}
-
 		}
 	}
 
-	public void viewCityOrStateByPesron() {
+	public void viewCityAndPersonAsWellAsStateAndPesron() {
 		List<Contact> contactsList = new ArrayList<>();
 		for (Map.Entry<String, AddressBook> set : addressBookSystem.entrySet()) {
 			AddressBook addressBook = set.getValue();
@@ -325,6 +297,21 @@ public class MainAddressBook {
 			System.out.println("Person Name and His/her State");
 			contactsList.stream()
 					.forEachOrdered(con -> System.out.println(con.getFirstName() + "     " + con.getState()));
+		}
+
+	}
+
+	public void numberOfContactsCountByCityAndState() {
+		List<Contact> contactsList = new ArrayList<>();
+		for (Map.Entry<String, AddressBook> set : addressBookSystem.entrySet()) {
+			AddressBook addressBook = set.getValue();
+			contactsList = addressBook.getContacts();
+			Map<Object, Integer> list = contactsList.parallelStream()
+					.collect(Collectors.toConcurrentMap(w -> w.getCity(), w -> 1, Integer::sum));
+			Map<Object, Integer> state = contactsList.parallelStream()
+					.collect(Collectors.toConcurrentMap(w -> w.getState(), w -> 1, Integer::sum));
+			System.out.println("City Name" + list.keySet() + ":  Number of persons in City " + list.values()
+					+ "        State Name" + state.keySet() + ":  Number of persons in State " + state.values());
 		}
 	}
 }
